@@ -40,11 +40,11 @@ grpc:
   minTimeBetweenPingsMs: 10000
   minPingIntervalWithoutDataMs: 5000
 connectors:
-  -
-    name: MQTT Broker Connector
-    type: mqtt
-    configuration: mqtt.json
-
+# -
+# name: MQTT Broker Connector
+# type: mqtt
+# configuration: mqtt.json
+#
 #  -
 #    name: Modbus Connector
 #    type: modbus
@@ -90,10 +90,10 @@ connectors:
 #    type: odbc
 #    configuration: odbc.json
 #
-#  -
-#    name: REST Connector
-#    type: rest
-#    configuration: rest.json
+ -
+   name: REST Connector
+   type: rest
+   configuration: rest.json
 #
 #  -
 #    name: SNMP Connector

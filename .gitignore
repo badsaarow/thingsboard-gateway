@@ -22,3 +22,7 @@ thingsboard_gateway/storage/data/
 __pycache__
 /thingsboard_gateway/config/
 /venv/
+.history
+./docker-compose.yml
+./Dockerfile
+./requirements.txt
