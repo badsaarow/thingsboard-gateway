@@ -2,7 +2,7 @@ version: '3.0'
 services:
   tb-gateway:
     restart: always
-    image: "thingsboard/tb-gateway"
+    build: .
     # Ports (Required for REST connector)
     ports:
       - "5000:5000"
