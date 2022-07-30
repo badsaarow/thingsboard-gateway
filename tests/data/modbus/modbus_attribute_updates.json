@@ -2,7 +2,7 @@
   "master": {
     "slaves": [
       {
-        "host": "127.0.0.1",
+        "host": "dev.vpn.casfend.kro.kr",
         "port": 5021,
         "type": "tcp",
         "method": "socket",

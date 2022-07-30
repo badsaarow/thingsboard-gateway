@@ -48,10 +48,10 @@ class OpcUaConnectorGeneralTest(ConnectorTestBase):
     def __server_run(self, test_server):
         self.test_server = test_server
         class SubHandler(object):
-            
+
             def datachange_notification(self, node, val, data):
                 print("Python: New data change event", node, val)
-                
+
             def event_notification(self, event):
                 print("Python: New event", event)
 
@@ -59,14 +59,14 @@ class OpcUaConnectorGeneralTest(ConnectorTestBase):
         def multiply(parent, x, y):
             return x * y
 
-        self.test_server.set_endpoint("opc.tcp://0.0.0.0:4840/freeopcua/server/")
+        self.test_server.set_endpoint("opc.tcp://dev.vpn.casfend.kro.kr:4840/freeopcua/server/")
         self.test_server.set_server_name("Test Server")
         self.test_server.set_security_policy([
             ua.SecurityPolicyType.NoSecurity,
             ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt,
             ua.SecurityPolicyType.Basic256Sha256_Sign])
 
-        uri = "http://127.0.0.1"
+        uri = "http://dev.vpn.casfend.kro.kr"
 
         idx = self.test_server.register_namespace(uri)
         device = self.test_server.nodes.objects.add_object(idx, "Device1")

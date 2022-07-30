@@ -1,5 +1,5 @@
 {
-  "host": "127.0.0.1",
+  "host": "0.0.0.0",
   "port": "2222",
   "SSL": false,
   "security": {
@@ -136,7 +136,7 @@
       "allowRedirects": true,
       "deviceNameFilter": "SN.*",
       "attributeFilter": ".*",
-      "requestUrlExpression": "http://127.0.0.1:5001/",
+      "requestUrlExpression": "http://dev.vpn.casfend.kro.kr:5001/",
       "valueExpression": "{\"deviceName\":\"${deviceName}\",\"${attributeKey}\":\"${attributeValue}\"}"
     }
   ],
@@ -144,7 +144,7 @@
     {
       "deviceNameFilter": ".*",
       "methodFilter": "echo",
-      "requestUrlExpression": "http://127.0.0.1:5001/${deviceName}",
+      "requestUrlExpression": "http://dev.vpn.casfend.kro.kr:5001/${deviceName}",
       "responseTimeout": 1,
       "HTTPMethod": "GET",
       "valueExpression": "${params}",
@@ -160,7 +160,7 @@
     {
       "deviceNameFilter": "SN.*",
       "methodFilter": "post_attributes",
-      "requestUrlExpression": "http://127.0.0.1:5000/my_devices",
+      "requestUrlExpression": "http://dev.vpn.casfend.kro.kr:5000/my_devices",
       "responseTimeout": 1,
       "HTTPMethod": "POST",
       "valueExpression": "{\"sensorName\":\"${deviceName}\", \"sensorModel\":\"${params.sensorModel}\", \"certificateNumber\":\"${params.certificateNumber}\", \"temp\":\"${params.temp}\", \"hum\":\"${params.hum}\"}",

@@ -198,7 +198,7 @@ class ConvertersTests(unittest.TestCase):
                                         "unit": "%RH",
                                         "value": "66"}
 
-        test_request_convert_config = "127.0.0.1:5000/last"
+        test_request_convert_config = "dev.vpn.casfend.kro.kr:5000/last"
         test_request_result = {
             "deviceName": "aranet:358151000412:100886",
             "deviceType": "default",

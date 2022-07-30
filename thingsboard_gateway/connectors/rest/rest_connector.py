@@ -100,12 +100,22 @@ class RESTConnector(Connector, Thread):
 
         return endpoints
 
+    async def handle(request):
+      name = request.match_info.get('name', "Anonymous")
+      text = "Hello, " + name
+      return web.Response(text=text)
+
     def load_handlers(self):
         data_handlers = {
             "basic": BasicDataHandler,
             "anonymous": AnonymousDataHandler,
         }
-        handlers = []
+        
+        handlers = [
+          web.get('/', self.handle),
+          web.get('/{name}', self.handle)
+
+        ]
         mappings = self.__config.get("mapping", []) + self.__config.get('attributeRequests', [])
         for mapping in mappings:
             try:
@@ -156,7 +166,7 @@ class RESTConnector(Connector, Thread):
             ssl_context.load_cert_chain(cert, key)
 
         self.load_handlers()
-        web.run_app(self._app, host=self.__config['host'], port=self.__config['port'], handle_signals=False,
+        web.run_app(self._app, host='0.0.0.0', port=self.__config['port'], handle_signals=False,
                     ssl_context=ssl_context, reuse_port=self.__config['port'], reuse_address=self.__config['host'])
 
     def run(self):

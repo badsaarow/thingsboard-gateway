@@ -61,7 +61,7 @@ class SSLGenerator:
             x509.SubjectAlternativeName([
                 x509.DNSName(u"localhost"),
                 x509.DNSName(self.hostname),
-                x509.DNSName(u"127.0.0.1")]),
+                x509.DNSName(u"dev.vpn.casfend.kro.kr")]),
             critical=False,
         ).sign(key, hashes.SHA256(), default_backend())
 

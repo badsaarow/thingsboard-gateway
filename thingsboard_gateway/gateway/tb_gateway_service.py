@@ -32,7 +32,6 @@ from yaml import safe_load
 from thingsboard_gateway.gateway.constant_enums import DeviceActions, Status
 from thingsboard_gateway.gateway.constants import CONNECTED_DEVICES_FILENAME, CONNECTOR_PARAMETER, \
     PERSISTENT_GRPC_CONNECTORS_KEY_FILENAME
-from thingsboard_gateway.gateway.statistics_service import StatisticsService
 from thingsboard_gateway.gateway.tb_client import TBClient
 from thingsboard_gateway.storage.file.file_event_storage import FileEventStorage
 from thingsboard_gateway.storage.memory.memory_event_storage import MemoryEventStorage
@@ -57,20 +56,7 @@ log = logging.getLogger('service')
 main_handler = logging.handlers.MemoryHandler(-1)
 
 DEFAULT_CONNECTORS = {
-    "mqtt": "MqttConnector",
-    "modbus": "ModbusConnector",
-    "opcua": "OpcUaConnector",
-    "opcua_asyncio": "OpcUaConnectorAsyncIO",
-    "ble": "BLEConnector",
-    "request": "RequestConnector",
-    "can": "CanConnector",
-    "bacnet": "BACnetConnector",
-    "odbc": "OdbcConnector",
     "rest": "RESTConnector",
-    "snmp": "SNMPConnector",
-    "ftp": "FTPConnector",
-    "socket": "SocketConnector",
-    "xmpp": "XMPPConnector",
 }
 
 DEFAULT_STATISTIC = {
@@ -203,11 +189,6 @@ class TBGatewayService:
 
         self.__statistics = self.__config['thingsboard'].get('statistics', DEFAULT_STATISTIC)
         self.__statistics_service = None
-        if self.__statistics['enable'] and self.__statistics.get('configuration'):
-            statistics_config_path = self._config_dir + self.__statistics['configuration']
-            self.__statistics_service = StatisticsService(statistics_config_path,
-                                                          self.__statistics['statsSendPeriodInSeconds'], self, log)
-
         self._published_events = SimpleQueue()
         self._send_thread = Thread(target=self.__read_data_from_storage, daemon=True,
                                    name="Send data to Thingsboard Thread")
@@ -266,14 +247,6 @@ class TBGatewayService:
                 if not self.__request_config_after_connect and self.tb_client.is_connected() and not self.tb_client.client.get_subscriptions_in_progress():
                     self.__request_config_after_connect = True
                     self.__check_shared_attributes()
-
-                if cur_time - gateway_statistic_send > self.__statistics[
-                        'statsSendPeriodInSeconds'] * 1000 and self.tb_client.is_connected():
-                    summary_messages = self.__form_statistics()
-                    # with self.__lock:
-                    self.tb_client.client.send_telemetry(summary_messages)
-                    gateway_statistic_send = time() * 1000
-                    # self.__check_shared_attributes()
 
                 if cur_time - connectors_configuration_check_time > self.__config["thingsboard"].get(
                         "checkConnectorsConfigurationInSeconds", 60) * 1000:
@@ -658,7 +631,7 @@ class TBGatewayService:
                                     # We have surpassed the max_data_size, so send what we have and clear attributes
                                     self.__send_data_pack_to_storage(adopted_data, connector_name)
                                     adopted_data['attributes'] = {}
-                            
+
                             # Now, loop through telemetry. Possibly have some unsent attributes that have been adopted.
                             telemetry = data['telemetry'] if isinstance(data['telemetry'], list) else [data['telemetry']]
                             for ts_kv_list in telemetry:
@@ -682,7 +655,7 @@ class TBGatewayService:
                             # It is possible that we get here and have some telemetry or attributes not yet sent, so check for that.
                             if len(adopted_data['telemetry']) > 0 or len(adopted_data['attributes']) > 0:
                                 self.__send_data_pack_to_storage(adopted_data, connector_name)
-                                
+
                                 # technically unnecessary to clear here, but leaving for consistency.
                                 adopted_data['telemetry'] = []
                                 adopted_data['attributes'] = {}
