@@ -74,7 +74,7 @@ DEFAULT_CONNECTORS = {
 }
 
 DEFAULT_STATISTIC = {
-    'enable': True,
+    'enable': False,
     'statsSendPeriodInSeconds': 3600
 }
 
